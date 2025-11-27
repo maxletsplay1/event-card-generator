@@ -1,9 +1,10 @@
 import QRCodeStyling from "qr-code-styling";
+import convertUTF8StringTo8bitArray from "~/composables/stringConverter";
 
 export default (options = {}) => {
     return new Promise(async (resolve, reject) => {
         const qrCode = new QRCodeStyling({
-            data: options.link,
+            data: convertUTF8StringTo8bitArray(options.link || "https://github.com/maxletsplay1/card-maker-3000"),
             width: options.size || 256,
             height: options.size || 256,
             dotsOptions: {
