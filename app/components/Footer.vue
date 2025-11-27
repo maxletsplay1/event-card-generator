@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link to="https://github.com/maxletsplay1/event-card-generator">
+  <nuxt-link to="https://github.com/maxletsplay1/event-card-generator" target="_blank">
     <USeparator class="p-6" icon="i-simple-icons-github" />
   </nuxt-link>
 </template>
