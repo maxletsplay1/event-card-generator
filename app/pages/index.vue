@@ -80,8 +80,9 @@
 
 <script setup>
 import { CalendarDate, Time } from '@internationalized/date'
-import html2canvas from 'html2canvas-pro'
 import generateQr from "~/composables/generateQr.ts";
+import dateTimeConverter from "~/composables/dateTimeConverter.js";
+import downloadFile from "~/composables/downloadFile.js";
 const inputDateRef = ref(null);
 const eventCardRef = ref(null);
 
@@ -109,41 +110,15 @@ const qrOptions = computed(() => ({
   image: form.image
 }));
 
-const dateTime = computed(() => {
-  if (!form.date || !form.time) return ["", ""]
-
-  const d = form.date
-  const day = String(d.day).padStart(2, "0")
-  const month = String(d.month).padStart(2, "0")
-  const time = form.time.toString().slice(0, 5)
-
-  return [
-    `${day}.${month}`,
-    time
-  ]
-})
 
 const setImage = (image) => {
   form.image = image;
 };
 
+const dateTime = computed(() => dateTimeConverter(form))
+
 const downloadImage = async () => {
-  const el = eventCardRef.value?.getEl?.()
-
-  if (!el) {
-    console.warn('Элемент не найден')
-    return
-  }
-
-  const canvas = await html2canvas(el, {
-    scale: 3,
-    useCORS: true
-  })
-
-  const link = document.createElement('a')
-  link.download = `${form.header}(${dateTime.value[0]}).png`
-  link.href = canvas.toDataURL('image/png')
-  link.click()
+  await downloadFile(eventCardRef.value?.getEl?.(), form.header, dateTime.value[1])
 }
 
 onMounted(() => {
